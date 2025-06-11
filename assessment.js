@@ -15,29 +15,44 @@ assessmentButton.addEventListener(
 
     // 診断結果表示エリアの作成
     resultDivision.innerText = '';
-    const heading = document.createElement('h3');
-    heading.innerText = '診断結果';
-    resultDivision.appendChild(heading);
+    
+  // headerDivision の作成
+  const headerDivision = document.createElement('div');
+  headerDivision.setAttribute('class', 'card-header text-bg-primary');
+  headerDivision.innerText = '診断結果';
 
-    const paragraph = document.createElement('p');
-    const result = assessment(userName);
-    paragraph.innerText = result;
-    resultDivision.appendChild(paragraph);
+  // bodyDivision の作成
+  const bodyDivision = document.createElement('div');
+  bodyDivision.setAttribute('class', 'card-body');
+
+  const paragraph = document.createElement('p');
+  paragraph.setAttribute('class', 'card-text');
+  const result = assessment(userName);
+  paragraph.innerText = result;
+  bodyDivision.appendChild(paragraph);
+
+  // resultDivision に Bootstrap のスタイルを適用する
+  resultDivision.setAttribute('class', 'card');
+
+  // headerDivision と bodyDivision を resultDivision に差し込む
+  resultDivision.appendChild(headerDivision);
+  resultDivision.appendChild(bodyDivision);
 
     // ツイートエリアの作成
     tweetDivision.innerText = '';
     const anchor = document.createElement('a');
     const hrefValue =
-      'https://x.com/intent/tweet?button_hashtag=' +
+      'https://twitter.com/intent/tweet?button_hashtag=' +
       encodeURIComponent('あなたのいいところ') +
       '&ref_src=twsrc%5Etfw';
-
+  
     anchor.setAttribute('href', hrefValue);
     anchor.setAttribute('class', 'twitter-hashtag-button');
     anchor.setAttribute('data-text', result);
     anchor.innerText = 'Tweet #あなたのいいところ';
-
+  
     tweetDivision.appendChild(anchor);
+
 
     const script = document.createElement('script');
     script.setAttribute('src', 'https://platform.twitter.com/widgets.js');
@@ -45,6 +60,14 @@ assessmentButton.addEventListener(
   }
 );
 
+userNameInput.addEventListener(
+  'keydown',
+  event => {
+    if(event.code === 'Enter') {
+      assessmentButton.dispatchEvent(new Event('click'))
+    }
+  }
+)
 
 const answers = [
   '###userName###のいいところは声です。###userName###の特徴的な声は皆を惹きつけ、心に残ります。',
@@ -61,7 +84,7 @@ const answers = [
   '###userName###のいいところは節度です。強引すぎない###userName###の考えに皆が感謝しています。',
   '###userName###のいいところは好奇心です。新しいことに向かっていく###userName###の心構えが多くの人に魅力的に映ります。',
   '###userName###のいいところは気配りです。###userName###の配慮が多くの人を救っています。',
-  '###userName###のいいところはそのすべてです。ありのままの###userName###自身がいいところなのです。',
+  '###userName###のいいところはその全てです。ありのままの###userName###自身がいいところなのです。',
   '###userName###のいいところは自制心です。やばいと思ったときにしっかりと衝動を抑えられる###userName###が皆から評価されています。'
 ];
 
@@ -138,9 +161,4 @@ function test() {
   console.log('同じ名前なら、同じ結果を出力することのテスト終了');
 }
 
-userNameInput.onkeydown = event=>
-  {
-    if(event.key =='Enter'){
-      assessmentButton.click();
-    }
-  }
+test();
